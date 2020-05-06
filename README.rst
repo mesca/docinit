@@ -32,7 +32,7 @@ You can add your own `.rst` files in the `doc` directory, and overwrite the defa
 
 If you need to configure further, do it in the ``docinit`` section of your `setup.cfg <https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files>`__. Refer to the configuration_ section for details.
 
-Setup a sphinx project
+Setup a Sphinx project
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The following will take care of initializing everything:
