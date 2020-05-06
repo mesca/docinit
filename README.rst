@@ -151,7 +151,7 @@ From git tags  - ``version`` in the ``build_sphinx`` section
 release
 ~~~~~~~
 
-The `semantic version <https://semver.org/>`__ of your package, including VCS status. If it is not explicitly defined, DocInit will use `pbr <https://docs.openstack.org/pbr/latest/user/features.html#version>`__ to fetch it from git tags.
+The full version of your package, including VCS status. If it is not explicitly defined, DocInit will use `pbr <https://docs.openstack.org/pbr/latest/user/features.html#version>`__ to fetch it from git tags.
 
 ============== =======
 Default        Lookups
