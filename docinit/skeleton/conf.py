@@ -72,9 +72,12 @@ todo_include_todos = True
 html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     'collapse_navigation': False,
-    'display_version': True,
-    'canonical_url': ''
+    'display_version': True
 }
+if config['docinit']['analytics']:
+    html_theme_options['analytics_id'] = config['docinit']['analytics']
+if config['docinit']['canonical_url']:
+    html_theme_options['canonical_url'] = config['docinit']['canonical_url']
 html_show_sourcelink = False
 html_show_sphinx = False
 html_logo = '_static/logo.png' if config['docinit']['logo_url'] else None

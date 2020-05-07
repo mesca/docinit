@@ -10,7 +10,53 @@ from setuptools.config import ConfigHandler, ConfigOptionsHandler
 from setuptools_scm import get_version
 
 
+def main():
+    """ Initialize documentation.
+    """
+    config = get_config()
+    src = str(Path(__file__).parent.joinpath('skeleton'))
+    dst = str(_find_root().joinpath(config['docinit']['doc_dir']))
+    _copy_tree(src, dst)
+    _download_file(config['docinit']['logo_url'], Path(dst).joinpath('_static/logo.png'))
+    _download_file(config['docinit']['favicon_url'], Path(dst).joinpath('_static/favicon.ico'))
+    print(f'Dcoumentation initialized in {dst}')
+
+def get_config():
+    """ Get the configuration.
+
+    Returns:
+        dict: The parsed `setup.cfg`.
+
+    """
+    path = _find_root(True)
+    config = Config(path)
+    return  config.config
+
+def set_vars(scope, config=None):
+    """ Inject config variables in the given scope.
+
+    Args:
+        scope (dict): The global symbol table.
+        config (dict): The parsed `setup.cfg`.
+    """
+    if not config:
+        config = get_config()
+    reserved = Config.options
+    for key, value in config['docinit'].items():
+        if key not in reserved:
+            scope[key] = value
+
+
+def setup_keyword(dist, keyword, value):
+    """ The callback for the `distutils.setup_keywords` entry point.
+    """
+    main()
+
+
 class DocInitCommand(Command):
+
+    """ The callback for the `distutils.commands` entry point.
+    """
 
     description = 'Initialize documentation'
     user_options = []
@@ -27,13 +73,25 @@ class DocInitCommand(Command):
         pass
 
     def run(self):
-        init_doc()
+        main()
 
 
 class Parse():
 
+    """ Parse `setup.cfg` options.
+    """
+
     @classmethod
     def option(cls, value):
+        """ Parse an option
+
+        Args:
+            value (str): The option string to parse.
+
+        Returns:
+            The parsed value.
+
+        """
         value = value.strip(' \r')
         if value.startswith('file:'):
             return ConfigHandler._parse_file(value)
@@ -72,7 +130,31 @@ class Parse():
 
 class Config():
 
-    options = [ 'doc_dir', 'name', 'parent_url', 'logo_url', 'favicon_url', 'version', 'release', 'packages', 'author', 'copyright']
+    """ Load a `setup.cfg` file, parse its contents, and augment it.
+
+    Args:
+        path (pathlib.Path): The full path to `setup.cfg`.
+
+    Attributes:
+        options (list): The list of DocInit accepted options.
+        config (dict): The fully-parsed `setup.cfg` file.
+
+    """
+
+    options = [
+        'doc_dir',
+        'name',
+        'parent_url',
+        'logo_url',
+        'favicon_url',
+        'version',
+        'release',
+        'packages',
+        'author',
+        'copyright',
+        'analytics',
+        'canonical_url'
+    ]
 
     def __init__(self, path):
         self.config = {
@@ -154,6 +236,13 @@ class Config():
 
 class Git():
 
+    """ Retrieve basic information in the current git repository.
+
+    Attributes:
+        info (dict): The retrieved information.
+
+    """
+
     def __init__(self):
         self.info = {
             'year': None,
@@ -177,33 +266,28 @@ class Git():
         return p.stdout.decode().strip()
 
 
-def init_doc():
-    config = get_config()
-    src = str(Path(__file__).parent.joinpath('skeleton'))
-    dst = str(_find_root().joinpath(config['docinit']['doc_dir']))
-    _copy_tree(src, dst)
-    _download_file(config['docinit']['logo_url'], Path(dst).joinpath('_static/logo.png'))
-    _download_file(config['docinit']['favicon_url'], Path(dst).joinpath('_static/favicon.ico'))
+def _find_root(full=False):
+    """ Find the project root directory
 
-def get_config():
-    path = _find_root().joinpath('setup.cfg')
-    config = Config(path)
-    return  config.config
+    This function works by looking for a `setup.cfg` file into the current directory.
+    If none is found, it looks in parent directories until it finds one or reaches the
+    filesystem root.
 
-def set_vars(scope, config=None):
-    if not config:
-        config = get_config()
-    reserved = Config.options
-    for key, value in config['docinit'].items():
-        if key not in reserved:
-            scope[key] = value
+    Args:
+        full (bool): If ``True``, the full path, including `setup.cfg` is returned.
 
-def _find_root():
+    Returns:
+        pathlib.Path: The root directory or full path to `setup.cfg`.
+
+    """
     path = Path(os.getcwd())
     while True:
         file = path.joinpath('setup.cfg')
         if file.is_file():
-            return path
+            if full:
+                return file
+            else:
+                return path
         if path == path.parent:
             return False
         path = path.parent
@@ -218,13 +302,18 @@ def _get_packages():
     return dirs
 
 def _get_version():
-    version = _get_release()
-    version = version.split('+', 1)[0]
-    version = version.split('.dev', 1)[0]
-    return version
+    return get_version(
+        relative_to=str(_find_root(True)),
+        local_scheme='no-local-version',
+        fallback_version='0.0.0'
+    )
 
 def _get_release():
-    return get_version(root='..', relative_to=__file__, fallback_version='0.0.0')
+    return get_version(
+        relative_to=str(_find_root(True)),
+        local_scheme='node-and-timestamp',
+        fallback_version='0.0.0'
+    )
 
 def _copy_tree(src, dst):
     if os.path.isdir(src):
@@ -244,4 +333,3 @@ def _download_file(url, dst):
     with urlopen(url) as response:
         with open(dst, 'wb') as file:
             copyfileobj(response, file)
-
