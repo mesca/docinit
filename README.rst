@@ -139,7 +139,7 @@ Default  Lookups
 version
 ~~~~~~~
 
-The `semantic version <https://semver.org/>`__ of your package. If it is not explicitly defined, DocInit will use `pbr <https://docs.openstack.org/pbr/latest/user/features.html#version>`__ to fetch it from git tags.
+The `semantic version <https://semver.org/>`__ of your package. If it is not explicitly defined, DocInit will use `setuptools_scm <https://github.com/pypa/setuptools_scm>`__ to fetch it from git tags, or fallback to ``0.0.0``.
 
 ============== =======
 Default        Lookups
@@ -151,7 +151,7 @@ From git tags  - ``version`` in the ``build_sphinx`` section
 release
 ~~~~~~~
 
-The full version of your package, including VCS status. If it is not explicitly defined, DocInit will use `pbr <https://docs.openstack.org/pbr/latest/user/features.html#version>`__ to fetch it from git tags.
+The full version of your package, including VCS status. If it is not explicitly defined, DocInit will use `setuptools_scm <https://github.com/pypa/setuptools_scm>`__ to fetch it from git tags, or fallback to ``0.0.0``.
 
 ============== =======
 Default        Lookups

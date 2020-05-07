@@ -7,7 +7,7 @@ from shutil import copyfile, copyfileobj
 from pathlib import Path
 from setuptools import Command, find_packages
 from setuptools.config import ConfigHandler, ConfigOptionsHandler
-from pbr.version import VersionInfo
+from setuptools_scm import get_version
 
 
 class DocInitCommand(Command):
@@ -109,12 +109,12 @@ class Config():
         self.config['docinit']['version'] = self._find([
             ('build_sphinx', 'version'),
             ('metadata', 'version')
-        ], VersionInfo(__name__).version_string())
+        ], _get_version())
 
     def _set_release(self):
         self.config['docinit']['release'] = self._find([
             ('build_sphinx', 'release')
-        ], VersionInfo(__name__).release_string())
+        ], _get_release())
 
     def _set_author(self):
         self.config['docinit']['author'] = self._find([
@@ -216,6 +216,15 @@ def _get_packages():
         if not '.' in package:
             dirs.append(str(root.joinpath(package)))
     return dirs
+
+def _get_version():
+    version = _get_release()
+    version = version.split('+', 1)[0]
+    version = version.split('.dev', 1)[0]
+    return version
+
+def _get_release():
+    return get_version(root='..', relative_to=__file__, fallback_version='0.0.0')
 
 def _copy_tree(src, dst):
     if os.path.isdir(src):

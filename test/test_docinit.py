@@ -1,9 +1,23 @@
 import os
 import pytest
 from datetime import datetime
-from docinit.docinit import Parse, Config, Git
+from docinit.docinit import Parse, Config, Git, _get_version
 
 path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'setup.cfg')
+
+def test_version(monkeypatch):
+    release = '1.2.3'
+    def mock_release():
+        return release
+    import docinit.docinit as di
+    monkeypatch.setattr(di, '_get_release', mock_release)
+    assert _get_version() == '1.2.3'
+    release = '1.2.3.dev6+g9088ab6'
+    assert _get_version() == '1.2.3'
+    release = '1.2.3+d20200507'
+    assert _get_version() == '1.2.3'
+    release = '1.2.3.dev6+g9088ab6.d20200507'
+    assert _get_version() == '1.2.3'
 
 def test_parse_bool():
     assert Parse.option('tRUe') == True
