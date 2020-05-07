@@ -2,7 +2,7 @@ DocInit
 =======
 
 DocInit is an opiniated, yet flexible documentation generator for your Python projects.
-It removes the burden of rewriting the same configuration files over and over, and favors a simple, non-repetitive declarative style instead. It uses `Sphinx <https://www.sphinx-doc.org/>`__ and `Sphinx AutoAPI <https://github.com/readthedocs/sphinx-autoapi>`__ behind the scenes.
+It removes the burden of rewriting the same configuration files over and over, and instead favors a simple, non-repetitive declarative style. It uses `Sphinx <https://www.sphinx-doc.org/>`__ and `Sphinx AutoAPI <https://github.com/readthedocs/sphinx-autoapi>`__ behind the scenes.
 
 Features
 --------
@@ -10,8 +10,13 @@ Features
 - Entirely configurable from your `setup.cfg` file
 - Automatically fills the blanks so you don't have to repeat yourself
 - Allows master and sub projects
-- Compatible with `Read the Docs <https://readthedocs.org/>`_
+- Compatible with `Read the Docs <https://readthedocs.org/>`__
 - Flexible and extensible
+
+Example
+-------
+
+The `Timeflux documentation <https://doc.timeflux.io>`__ is managed by DocInit.
 
 Install
 -------
