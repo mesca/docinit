@@ -5,7 +5,7 @@ from docinit.docinit import Parse, Config, Git
 
 path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'setup.cfg')
 
-USER = 'GitHub' if os.getenv('GITHUB_ACTIONS', False) else 'mesca'
+USER = 'GitHub' if os.getenv('GITHUB_ACTIONS') else 'mesca'
 
 def test_parse_bool():
     assert Parse.option('tRUe') == True
