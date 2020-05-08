@@ -46,9 +46,13 @@ def set_vars(scope, config=None):
         if key not in reserved:
             scope[key] = value
 
-
 def setup_keyword(dist, keyword, value):
     """ The callback for the `distutils.setup_keywords` entry point.
+    """
+    main()
+
+def finalize_distribution(dist):
+    """ The callback for the `setuptools.finalize_distribution_options` entry point.
     """
     main()
 
