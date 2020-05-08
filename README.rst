@@ -1,3 +1,5 @@
+|Build| |PyPI|
+
 DocInit
 =======
 
@@ -265,3 +267,7 @@ Alternative build systems
 -------------------------
 
 DocInit currently only parses Setuptools `setup.cfg` files. We plan to add support for other build systems as well, such as `Flit <https://flit.readthedocs.io/>`__ and `Poetry <https://python-poetry.org/>`__, which rely on `pyproject.toml` files.
+
+
+.. |Build| image:: https://github.com/mesca/docinit/workflows/Python%20application/badge.svg
+.. |PyPI| image:: https://badge.fury.io/py/docinit.svg
