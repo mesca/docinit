@@ -257,7 +257,7 @@ class Git():
             self.info['author'] = info[1]
             self.info['email'] = info[2]
             url = self._run("git config --get remote.origin.url")
-            self.info['name'] = os.path.basename(url)[0:-4]
+            self.info['name'] = os.path.basename(url).split('.git')[0]
         except:
             pass
 
