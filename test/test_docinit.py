@@ -5,9 +5,6 @@ from docinit.docinit import Parse, Config, Git
 
 path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'setup.cfg')
 
-USER = 'GitHub' if os.getenv('GITHUB_ACTIONS') else 'mesca'
-print(os.environ)
-
 def test_parse_bool():
     assert Parse.option('tRUe') == True
     assert Parse.option('1') == True
@@ -64,7 +61,7 @@ def test_config_version():
 
 def test_config_author():
     config = Config(path)
-    assert config.config['docinit']['author'] == USER
+    assert config.config['docinit']['author'] == 'mesca'
     config.config['metadata']['author'] = 'Me'
     config._set_author()
     assert config.config['docinit']['author'] == 'Me'
@@ -81,10 +78,10 @@ def test_config_copyright():
     assert config.config['docinit']['copyright'].startswith('2020')
     config.config['git']['year'] = '2000'
     config._set_copyright()
-    assert config.config['docinit']['copyright'] == f'2000-{year}, {USER}'
+    assert config.config['docinit']['copyright'] == f'2000-{year}, mesca'
     config.config['git']['year'] = year
     config._set_copyright()
-    assert config.config['docinit']['copyright'] == f'{year}, {USER}'
+    assert config.config['docinit']['copyright'] == f'{year}, mesca'
     config.config['build_sphinx']['copyright'] = 'foobar'
     config._set_copyright()
     assert config.config['docinit']['copyright'] == 'foobar'
