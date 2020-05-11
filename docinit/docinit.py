@@ -86,17 +86,23 @@ class Parse():
     """
 
     @classmethod
-    def option(cls, value):
+    def option(cls, section, key, value):
         """ Parse an option
 
         Args:
-            value (str): The option string to parse.
+            section (str):  The config section.
+            key (str):  The option key.
+            value (str): The option value string to parse.
 
         Returns:
             The parsed value.
 
         """
         value = value.strip(' \r')
+        if section == 'options' and key.endswith('_requires') :
+            return value
+        if section == 'options.extras_require':
+            return value
         if value.startswith('file:'):
             return ConfigHandler._parse_file(value)
         if value.startswith('attr:'):
@@ -171,7 +177,7 @@ class Config():
         parser = ConfigParser()
         parser.read(path)
         for section in parser.sections():
-            self.config[section] = {k: Parse.option(v) for (k, v) in parser.items(section)}
+            self.config[section] = {k: Parse.option(section, k, v) for (k, v) in parser.items(section)}
         for option in self.options:
             if option not in self.config['docinit']:
                 try:
