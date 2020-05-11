@@ -86,13 +86,13 @@ class Parse():
     """
 
     @classmethod
-    def option(cls, section, key, value):
+    def option(cls, value, key='', section=''):
         """ Parse an option
 
         Args:
-            section (str):  The config section.
-            key (str):  The option key.
             value (str): The option value string to parse.
+            key (str):  The option key.
+            section (str):  The config section.
 
         Returns:
             The parsed value.
@@ -177,7 +177,7 @@ class Config():
         parser = ConfigParser()
         parser.read(path)
         for section in parser.sections():
-            self.config[section] = {k: Parse.option(section, k, v) for (k, v) in parser.items(section)}
+            self.config[section] = {k: Parse.option(v, k, section) for (k, v) in parser.items(section)}
         for option in self.options:
             if option not in self.config['docinit']:
                 try:
