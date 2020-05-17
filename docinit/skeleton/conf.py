@@ -18,7 +18,7 @@ author = config['docinit']['author']
 copyright = config['docinit']['copyright']
 version = config['docinit']['version']
 release = config['docinit']['release']
-language = None
+language = 'en'
 
 # -- Setup--------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ extensions = [
 
 intersphinx_mapping = { 'python': ('https://docs.python.org/3', None) }
 if config['docinit']['parent_url']:
-    intersphinx_mapping['__parent__'] = (config['docinit']['parent_url'] + '/latest', None)
+    intersphinx_mapping['__parent__'] = (config['docinit']['parent_url'] + f'/{language}/latest', None)
 
 templates_path = ['_templates']
 master_doc = 'index'
