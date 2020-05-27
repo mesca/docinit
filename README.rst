@@ -263,6 +263,9 @@ Or if you prefer, in your `pyproject.toml`:
     requires = ["setuptools>=42", "wheel", "docinit"]
     build-backend = "setuptools.build_meta"
 
+Please note: before version `20.1.b1` and since version `20.1.1`, `pip` `builds in a temporary directory <https://pip.pypa.io/en/stable/news/>`__. Therefore, on `Read The Docs` you need to install the package with `setup.py` so the documentation is generated in the current directory.
+
+
 Alternative build systems
 -------------------------
 
