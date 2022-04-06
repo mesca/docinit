@@ -75,7 +75,7 @@ def test_config_packages():
 def test_config_copyright():
     year = str(datetime.now().year)
     config = Config(path)
-    assert config.config['docinit']['copyright'].startswith('2020')
+    assert config.config['docinit']['copyright'].startswith('2022')
     config.config['git']['year'] = '2000'
     config._set_copyright()
     assert config.config['docinit']['copyright'] == f'2000-{year}, mesca'
@@ -89,4 +89,4 @@ def test_config_copyright():
 def test_git():
     info = Git().info
     assert info['name'] == 'docinit'
-    assert info['year'] == '2020'
+    assert info['year'] == '2022'
