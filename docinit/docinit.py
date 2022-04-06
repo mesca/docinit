@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from shutil import copyfile, copyfileobj
 from pathlib import Path
 from setuptools import Command, find_packages
-from setuptools.config import ConfigHandler, ConfigOptionsHandler
+from setuptools.config.setupcfg import ConfigHandler, ConfigOptionsHandler
 from setuptools_scm import get_version
 
 
@@ -86,7 +86,7 @@ class Parse():
     """
 
     @classmethod
-    def option(cls, value, key='', section=''):
+    def option(cls, value, key='', section='', root=''):
         """ Parse an option
 
         Args:
@@ -104,7 +104,7 @@ class Parse():
         if section == 'options.extras_require':
             return value
         if value.startswith('file:'):
-            return ConfigHandler._parse_file(value)
+            return ConfigHandler._parse_file(value, root)
         if value.startswith('attr:'):
             return ConfigOptionsHandler._parse_attr(value)
         if value in ['find:', 'find_namespace:']:
@@ -174,10 +174,11 @@ class Config():
             'build_sphinx': {},
             'git': Git().info
         }
+        root = os.path.dirname(path)
         parser = ConfigParser()
         parser.read(path)
         for section in parser.sections():
-            self.config[section] = {k: Parse.option(v, k, section) for (k, v) in parser.items(section)}
+            self.config[section] = {k: Parse.option(v, k, section, root) for (k, v) in parser.items(section)}
         for option in self.options:
             if option not in self.config['docinit']:
                 try:
