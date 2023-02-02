@@ -9,7 +9,6 @@ from setuptools import Command, find_packages
 from setuptools.config.setupcfg import ConfigHandler, ConfigOptionsHandler
 from setuptools_scm import get_version
 
-
 def main():
     """ Initialize documentation.
     """
@@ -104,7 +103,13 @@ class Parse():
         if section == 'options.extras_require':
             return value
         if value.startswith('file:'):
-            return ConfigHandler._parse_file(value, root)
+            if isinstance(ConfigHandler.__dict__["_get_parser_compound"], classmethod):
+                # A quick hack to solve the following change:
+                # https://github.com/pypa/setuptools/commit/4e766834d72623f3b938f1d4148547ea73af1bf5
+                mock = type("", (object,), {"_referenced_files": set()})()
+                return ConfigHandler._parse_file(mock, value, root)
+            else:
+                return ConfigHandler._parse_file(value, root)
         if value.startswith('attr:'):
             return ConfigOptionsHandler._parse_attr(value)
         if value in ['find:', 'find_namespace:']:
